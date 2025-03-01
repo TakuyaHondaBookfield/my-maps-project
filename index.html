@@ -86,18 +86,18 @@
         function calculateDistances() {
             let resultsDiv = document.getElementById("results");
             resultsDiv.innerHTML = "<h3>距離の測定結果</h3>";
-
+        
             for (let i = 0; i < markers.length; i++) {
                 for (let j = i + 1; j < markers.length; j++) {
                     let loc1 = markers[i];
                     let loc2 = markers[j];
-
+        
                     // 直線距離を計算
                     let directDistance = google.maps.geometry.spherical.computeDistanceBetween(loc1.position, loc2.position);
                     let directDistanceKm = (directDistance / 1000).toFixed(2);
 
-                    // 道路距離を取得
-                    fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${loc1.address}&destinations=${loc2.address}&mode=driving&key=${apiKey}`)
+                    // 🚀 CORSプロキシを経由して Distance Matrix API をリクエスト
+                    fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/distancematrix/json?origins=${encodeURIComponent(loc1.address)}&destinations=${encodeURIComponent(loc2.address)}&mode=driving&key=${apiKey}`)
                         .then(response => response.json())
                         .then(data => {
                             if (data.status === "OK") {
